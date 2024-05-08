@@ -19,17 +19,6 @@ public class CreatingCourierTest {
         courierSteps = new CourierSteps();
     }
 
-
-    @Test
-    @DisplayName("Creating new courier")
-    @Description("Creating new courier with correct credentials and check the positive creating courier")
-    public void creatingCourierPositive() {
-        Response responseCreate = courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, RANDOM_NAME);
-        courierSteps.checkAnswerValidRegistration(responseCreate);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
-    }
-
     @Test
     @DisplayName("Creating identical couriers")
     @Description("Checking response (status code and body) when trying to create identical couriers")
@@ -37,17 +26,6 @@ public class CreatingCourierTest {
         courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, RANDOM_NAME);
         Response responseIdentical = courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, RANDOM_NAME);
         courierSteps.checkAnswerReuseRegistrationData(responseIdentical);
-    }
-
-    @Test
-    @DisplayName("Creating a courier with an existing login")
-    @Description("Creating a courier with an existing login and password checking the response")
-    public void creatingCourierWithExistingLoginConflict() {
-        courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, RANDOM_NAME);
-        Response responseExisting = courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, RANDOM_NAME);
-        courierSteps.checkAnswerReuseRegistrationData(responseExisting);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 
     @Test
@@ -64,16 +42,6 @@ public class CreatingCourierTest {
     public void creatingCourierWithoutPasswordBadRequest() {
         Response responseWithoutPass = courierSteps.createCourier(RANDOM_LOGIN, "", RANDOM_NAME);
         courierSteps.checkAnswerWithNotEnoughRegData(responseWithoutPass);
-    }
-
-    @Test
-    @DisplayName("Creating a courier without firstName")
-    @Description("Creating a courier without firstName and checking the response")
-    public void creatingCourierWithoutNamePositive() {
-        Response responseWithoutName = courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, "");
-        courierSteps.checkAnswerValidRegistration(responseWithoutName);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 
 }

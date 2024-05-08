@@ -2,6 +2,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import steps.CourierSteps;
@@ -19,14 +20,20 @@ public class LoginCourierTest {
         courierSteps.createCourier(RANDOM_LOGIN, RANDOM_PASS, RANDOM_NAME);
     }
 
+    @After
+    public void delete() {
+        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
+        courierSteps.checkAnswerThenValidDeleting(responseDelete);
+    }
+
+
+
     @Test
     @DisplayName("Successful courier login")
     @Description("When entering a valid password and login, a successful request returns the id of the courier")
     public void loginCourierSuccess() {
         Response loginResponse = courierSteps.loginCourier(RANDOM_LOGIN, RANDOM_PASS);
         courierSteps.checkAnswerAndPresenceId(loginResponse);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 
     @Test
@@ -35,8 +42,6 @@ public class LoginCourierTest {
     public void loginCourierWithIncorrectLoginFailed() {
         Response wrongLoginResponse = courierSteps.loginCourier("wrongLogin", RANDOM_PASS);
         courierSteps.checkAnswerWithWrongData(wrongLoginResponse);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 
     @Test
@@ -45,8 +50,6 @@ public class LoginCourierTest {
     public void loginCourierWithIncorrectPassFailed() {
         Response wrongPassResponse = courierSteps.loginCourier(RANDOM_LOGIN, "987");
         courierSteps.checkAnswerWithWrongData(wrongPassResponse);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 
     @Test
@@ -55,8 +58,6 @@ public class LoginCourierTest {
     public void loginCourierWithoutLoginFailed() {
         Response withoutLoginResponse = courierSteps.loginCourier("", RANDOM_PASS);
         courierSteps.checkAnswerWithoutData(withoutLoginResponse);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 
     @Test
@@ -65,7 +66,5 @@ public class LoginCourierTest {
     public void loginCourierWithoutPassFailed() {
         Response withoutPassResponse = courierSteps.loginCourier(RANDOM_LOGIN, "");
         courierSteps.checkAnswerWithoutData(withoutPassResponse);
-        Response responseDelete = courierSteps.deleteCourier(RANDOM_LOGIN, RANDOM_PASS);
-        courierSteps.checkAnswerThenValidDeleting(responseDelete);
     }
 }
